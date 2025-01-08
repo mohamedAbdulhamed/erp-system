@@ -1,0 +1,35 @@
+# Ignore build and publish outputs
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+
+# Ignore user-specific files
+*.user
+*.vspscc
+*.vssscc
+.vscode/
+*.suo
+
+# Ignore config and secrets
+appsettings*.json
+secrets.json
+
+# Ignore logs
+*.log
+logs/
+
+# Ignore IDE files
+.vs/
+.idea/
+
+# Ignore dependencies and package outputs
+packages/
+*.nupkg
+*.snupkg
+
+# Ignore runtime and build artifacts
+project.lock.json
+project.fragment.lock.json
+artifacts/
