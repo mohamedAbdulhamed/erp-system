@@ -35,9 +35,9 @@ namespace Management_System.Controller
 
         }
 
-        [HttpPost("AddSupplier")]
+        [HttpPost("Add")]
         //[Authorize]
-        public async Task<IActionResult> AddSupplier(CreateSupplierRequest model)
+        public async Task<IActionResult> Add(CreateSupplierRequest model)
         {
             var user = await _authService.GetUser(User);
             //if (user == null) return Unauthorized("User couldn't be found");
