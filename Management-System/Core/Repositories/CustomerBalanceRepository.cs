@@ -17,7 +17,7 @@ namespace ManagementSystem.Core.Repositories
                 if (customerBalance == null) throw new Exception("Customer or balance not found.");
                 switch (transaction.TransactionType)
                 {
-                    case CustomerTransactionType.Addition:
+                    case CustomerTransactionType.Payment:
                         customerBalance.TotalCredit += transaction.Amount;
                         //safe.TotalAmount += transaction.Amount;
                         break;
@@ -50,7 +50,7 @@ namespace ManagementSystem.Core.Repositories
                 if (customerBalance == null) throw new Exception("Customer or Customer Balance not found.");
                 switch (transaction.TransactionType)
                 {
-                    case CustomerTransactionType.Addition:
+                    case CustomerTransactionType.Payment:
                         customerBalance.TotalCredit -= transaction.Amount;
                         //safe.TotalAmount -= transaction.Amount;
                         break;

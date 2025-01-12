@@ -18,8 +18,7 @@ namespace ManagementSystem.Models
 
     public enum SupplierTransactionType
     {
-        Addition,
+        Payment,
         Discount,
-        Refund
     }
 }

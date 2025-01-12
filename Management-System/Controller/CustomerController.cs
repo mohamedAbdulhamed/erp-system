@@ -61,6 +61,29 @@ namespace ManagementSystem.Controller
 
         }
 
+        [HttpGet("GetCustomerTypes")]
+        [Authorize]
+        public async Task<IActionResult> GetCustomerTypes()
+        {
+            try
+            {
+                var types = Enum.GetValues(typeof(CustomerType))
+                        .Cast<CustomerType>()
+                        .Select(t => new
+                        {
+                            Id = (int)t,       // Numeric value of the enum
+                            Name = t.ToString() // Name of the enum
+                        });
+                ;
+                return Ok(types);
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogError(ex.Message, "Error in GetCustomerTypes customer controller");
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpPost("AddCustomer")]
         //[Authorize]
         public async Task<IActionResult> AddCustomer(CreateCustomerRequest model)

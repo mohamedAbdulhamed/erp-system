@@ -37,6 +37,9 @@ namespace ManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CustomerType")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -82,14 +85,17 @@ namespace ManagementSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerOrderID"));
 
-                    b.Property<int>("CustumerID")
+                    b.Property<int>("CustomerOrderType")
                         .HasColumnType("int");
 
-                    b.Property<int>("CustumerPaymentType")
+                    b.Property<int>("CustumerID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderStatues")
+                        .HasColumnType("int");
 
                     b.Property<int>("OrderType")
                         .HasColumnType("int");
@@ -193,7 +199,6 @@ namespace ManagementSystem.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InventoryID"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContactNumber")
@@ -234,27 +239,24 @@ namespace ManagementSystem.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<decimal?>("MaxPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("MinPrice")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("ProductCategoryID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Quantity")
+                    b.Property<decimal>("PurchasePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<int>("ReorderLevel")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("SellingPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("SupplierID")
                         .HasColumnType("int");
@@ -291,24 +293,6 @@ namespace ManagementSystem.Migrations
                     b.HasKey("ProductCategoryId");
 
                     b.ToTable("ProductCategories");
-                });
-
-            modelBuilder.Entity("ManagementSystem.Models.ProductInventoryMappings", b =>
-                {
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InventoryID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductID", "InventoryID");
-
-                    b.HasIndex("InventoryID");
-
-                    b.ToTable("ProductInventories");
                 });
 
             modelBuilder.Entity("ManagementSystem.Models.Supplier", b =>
@@ -377,7 +361,7 @@ namespace ManagementSystem.Migrations
                     b.Property<int>("SupplierID")
                         .HasColumnType("int");
 
-                    b.Property<int>("SupplierPaymentType")
+                    b.Property<int>("SupplierOrderType")
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
@@ -738,25 +722,6 @@ namespace ManagementSystem.Migrations
                     b.Navigation("Supplier");
                 });
 
-            modelBuilder.Entity("ManagementSystem.Models.ProductInventoryMappings", b =>
-                {
-                    b.HasOne("ManagementSystem.Models.Inventory", "Inventory")
-                        .WithMany("ProductInventoryMappings")
-                        .HasForeignKey("InventoryID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ManagementSystem.Models.Product", "Product")
-                        .WithMany("ProductInventoryMappings")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Inventory");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("ManagementSystem.Models.SupplierBalance", b =>
                 {
                     b.HasOne("ManagementSystem.Models.Supplier", "Supplier")
@@ -878,16 +843,6 @@ namespace ManagementSystem.Migrations
             modelBuilder.Entity("ManagementSystem.Models.Factory", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("ManagementSystem.Models.Inventory", b =>
-                {
-                    b.Navigation("ProductInventoryMappings");
-                });
-
-            modelBuilder.Entity("ManagementSystem.Models.Product", b =>
-                {
-                    b.Navigation("ProductInventoryMappings");
                 });
 
             modelBuilder.Entity("ManagementSystem.Models.ProductCategory", b =>

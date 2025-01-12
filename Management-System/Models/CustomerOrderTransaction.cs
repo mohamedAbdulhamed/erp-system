@@ -18,7 +18,7 @@ namespace ManagementSystem.Models
     
     public enum CustomerTransactionType
     {
-        Addition,
+        Payment,
         Discount,
     }   
 }

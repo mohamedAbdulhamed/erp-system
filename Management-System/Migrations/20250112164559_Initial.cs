@@ -61,9 +61,10 @@ namespace ManagementSystem.Migrations
                     CustomerID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CustomerType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,7 +92,7 @@ namespace ManagementSystem.Migrations
                     InventoryID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     InventoryType = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
@@ -265,7 +266,8 @@ namespace ManagementSystem.Migrations
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OrderType = table.Column<int>(type: "int", nullable: false),
-                    CustumerPaymentType = table.Column<int>(type: "int", nullable: false),
+                    OrderStatues = table.Column<int>(type: "int", nullable: false),
+                    CustomerOrderType = table.Column<int>(type: "int", nullable: false),
                     CustumerID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -310,10 +312,9 @@ namespace ManagementSystem.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    MinPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    MaxPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: true),
+                    SellingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PurchasePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
                     ReorderLevel = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -375,7 +376,7 @@ namespace ManagementSystem.Migrations
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OrderType = table.Column<int>(type: "int", nullable: false),
-                    SupplierPaymentType = table.Column<int>(type: "int", nullable: false),
+                    SupplierOrderType = table.Column<int>(type: "int", nullable: false),
                     SupplierID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -438,31 +439,6 @@ namespace ManagementSystem.Migrations
                         principalTable: "Products",
                         principalColumn: "ProductID",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductInventories",
-                columns: table => new
-                {
-                    ProductID = table.Column<int>(type: "int", nullable: false),
-                    InventoryID = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductInventories", x => new { x.ProductID, x.InventoryID });
-                    table.ForeignKey(
-                        name: "FK_ProductInventories_Inventories_InventoryID",
-                        column: x => x.InventoryID,
-                        principalTable: "Inventories",
-                        principalColumn: "InventoryID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductInventories_Products_ProductID",
-                        column: x => x.ProductID,
-                        principalTable: "Products",
-                        principalColumn: "ProductID",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -559,11 +535,6 @@ namespace ManagementSystem.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductInventories_InventoryID",
-                table: "ProductInventories",
-                column: "InventoryID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_FactoryID",
                 table: "Products",
                 column: "FactoryID");
@@ -639,7 +610,7 @@ namespace ManagementSystem.Migrations
                 name: "CustomerOrderTransactions");
 
             migrationBuilder.DropTable(
-                name: "ProductInventories");
+                name: "Inventories");
 
             migrationBuilder.DropTable(
                 name: "SupplierBalances");
@@ -658,9 +629,6 @@ namespace ManagementSystem.Migrations
 
             migrationBuilder.DropTable(
                 name: "CustomerOrders");
-
-            migrationBuilder.DropTable(
-                name: "Inventories");
 
             migrationBuilder.DropTable(
                 name: "Products");

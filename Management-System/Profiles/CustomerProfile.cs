@@ -23,8 +23,8 @@ namespace ManagementSystem.Profiles
             config.NewConfig<Customer, CustomerResponse>()
                 .Map(dest => dest.CustomerName, src => src.CustomerName)
                 .Map(dest => dest.PhoneNumber, src => src.PhoneNumber)
-                .Map(dest => dest.IsActive, src => src.IsActive)
-                .Map(dest => dest.CustomerOrderTransactions, src => src.CustomerOrderTransactions);
+                .Map(dest => dest.IsActive, src => src.IsActive);
+                
             }
           
         }

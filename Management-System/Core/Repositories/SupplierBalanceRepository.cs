@@ -19,7 +19,7 @@ namespace ManagementSystem.Core.Repositories
                 switch (transaction.TransactionType)
                 {
 
-                    case SupplierTransactionType.Addition:
+                    case SupplierTransactionType.Payment:
                         supplierBalance.TotalCredit += transaction.Amount;
                         break;
 
@@ -49,7 +49,7 @@ namespace ManagementSystem.Core.Repositories
                 switch (transaction.TransactionType)
                 {
 
-                    case SupplierTransactionType.Addition:
+                    case SupplierTransactionType.Payment:
                         supplierBalance.TotalCredit -= transaction.Amount;
                         break;
 

@@ -7,9 +7,10 @@ namespace ManagementSystem.Dtos.Customer
         public required string CustomerName { get; set; }
         public required string PhoneNumber { get; set; }
         public bool IsActive { get; set; } = true;
+        public CustomerType CustomerType { get; set; } 
 
         // Navigation Properties
-        public virtual ICollection<ManagementSystem.Models.CustomerOrderTransaction> CustomerOrderTransactions { get; set; } = new List<ManagementSystem.Models.CustomerOrderTransaction>();
+
 
     }
 }
