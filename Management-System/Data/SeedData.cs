@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ManagementSystem.Models;
-using System.Security.Claims;
-using ManagementSystem.Models;
-using ManagementSystem.Data;
+
 
 namespace ManagementSystem.Data
 {

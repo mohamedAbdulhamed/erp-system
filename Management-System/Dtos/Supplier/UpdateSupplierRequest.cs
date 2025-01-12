@@ -3,7 +3,7 @@
     public class UpdateSupplierRequest
     {
         public int SupplierId { get; set; }
-        public string SupplierName { get; set; }
-        public string phoneNumber { get; set; }
+        public required string SupplierName { get; set; }
+        public required string phoneNumber { get; set; }
     }
 }

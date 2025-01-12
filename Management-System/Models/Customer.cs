@@ -14,6 +14,5 @@ namespace ManagementSystem.Models
         public virtual CustomerBalance CustomerBalance { get; set; }
         public virtual ICollection<CustomerOrder> CustomerOrders { get; set; } = new List<CustomerOrder>();
         public virtual ICollection<CustomerOrderTransaction> CustomerOrderTransactions { get; set; } = new List<CustomerOrderTransaction>();
-        //public virtual ICollection<CustomerPhone> CustomerPhones { get; set; } = new List<CustomerPhone>(); 
     }
 }

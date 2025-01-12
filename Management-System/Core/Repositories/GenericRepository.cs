@@ -167,7 +167,7 @@ namespace ManagementSystem.Core.Repositories
             }
         }
 
-        public virtual async Task<bool> UpdateAsync(T entity)
+        public virtual bool Update(T entity)
         {
             try
             {

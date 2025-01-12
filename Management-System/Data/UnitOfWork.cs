@@ -14,8 +14,9 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public IInventoryRepository Inventories {  get; private set; }  
     public ICustomerOrderTransactionRepository CustomerOrderTransactions { get; private set; }
     public ICustomerBalanceRepository CustomerBalances {  get; private set; }
-
+    public IProductRepository Products { get; private set; }
     public ISupplierOrderTransactionRepository SupplierOrderTransactions { get; private set; }
+    public ICustomerOrderRepository CustomerOrders { get; private set; }
 
     public ISupplierBalanceRepository SupplierBalances { get; private set; }
 
@@ -33,6 +34,8 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         CustomerBalances = new CustomerBalanceRepository(_context,_logger);
         SupplierOrderTransactions = new SupplierOrderTransactionRepository(_context,_logger);
         SupplierBalances = new SupplierBalanceRepository(_context,_logger);
+        Products = new ProductRepository(_context,_logger);
+        CustomerOrders = new CustomerOrderRepository(_context,_logger);
     }
 
     public async Task CompleteAsync()

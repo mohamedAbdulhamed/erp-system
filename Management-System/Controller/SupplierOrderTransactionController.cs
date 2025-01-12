@@ -118,7 +118,7 @@ namespace ManagementSystem.Controller
                 if (oldTransaction == null) return NotFound("transaction not found");
                 var newTransaction = _mapper.Map<SupplierOrderTransaction>(model);
                 newTransaction.TransactionID = oldTransaction.TransactionID;
-                await _unitOfWork.SupplierOrderTransactions.UpdateAsync(newTransaction);
+                 _unitOfWork.SupplierOrderTransactions.Update(newTransaction);
                 if (!await _unitOfWork.SupplierBalances.ProcessUpdateTransaction(oldTransaction, newTransaction)) return BadRequest();
                 await _unitOfWork.CompleteAsync();
                 return Ok("SupplierOrderTransaction was updated");

@@ -69,7 +69,7 @@ namespace ManagementSystem.Controller
             {
                 if (await _unitOfWork.Customers.FindAsync(c => c.CustomerID == model.CustomerID) == null) return BadRequest("this customer isn't exist");
                 var customerBalance = _mapper.Map<CustomerBalance>(model);
-                await _unitOfWork.CustomerBalances.UpdateAsync(customerBalance);
+                _unitOfWork.CustomerBalances.Update(customerBalance);
                 await _unitOfWork.CompleteAsync();
                 return Ok("Customer balance is added successfully");
             }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ManagementSystem.Models;
-using ManagementSystem.Models;
 
 namespace ManagementSystem.Data
 {
@@ -23,8 +22,7 @@ namespace ManagementSystem.Data
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Product> Products{ get; set; }
         public DbSet<ProductCategory> ProductCategories{ get; set; }
-        public DbSet<ProductInventoryMappings> ProductInventories{ get; set; }
-        //public DbSet<CustomerPhone> CustomerPhones { get; set; }
+       
         
 
 
@@ -57,22 +55,6 @@ namespace ManagementSystem.Data
                 .HasForeignKey(p => p.FactoryID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // ProductInventory - Product
-            modelBuilder.Entity<ProductInventoryMappings>()
-                .HasKey(pi => new { pi.ProductID, pi.InventoryID });
-
-            modelBuilder.Entity<ProductInventoryMappings>()
-                .HasOne(pi => pi.Product)
-                .WithMany(p => p.ProductInventoryMappings)
-                .HasForeignKey(pi => pi.ProductID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // ProductInventory - Inventory
-            modelBuilder.Entity<ProductInventoryMappings>()
-                .HasOne(pi => pi.Inventory)
-                .WithMany(i => i.ProductInventoryMappings)
-                .HasForeignKey(pi => pi.InventoryID)
-                .OnDelete(DeleteBehavior.Restrict);
            
             modelBuilder.Entity<Customer>()
                 .HasIndex(c => c.PhoneNumber)

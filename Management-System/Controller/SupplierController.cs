@@ -97,7 +97,7 @@ namespace ManagementSystem.Controller
                 if (supplier == null) return BadRequest("Supplier Couldn't be found");
                 supplier.SupplierName = model.SupplierName;
                 supplier.PhoneNumber = model.phoneNumber;
-                await _unitOfWork.Suppliers.UpdateAsync(supplier);
+                _unitOfWork.Suppliers.Update(supplier);
                 await _unitOfWork.CompleteAsync();
                 return Ok("Supplier was Updted successfully");
             }
@@ -118,7 +118,7 @@ namespace ManagementSystem.Controller
                 if (supplier == null) return BadRequest("Supplier Couldn't be found");
                 if (supplier.IsActive == true) return BadRequest("Supplier already active");
                 supplier.IsActive = true;
-                await _unitOfWork.Suppliers.UpdateAsync(supplier);
+                _unitOfWork.Suppliers.Update(supplier);
                 await _unitOfWork.CompleteAsync();
                 return Ok("Supplier Active successfully");
             }
@@ -139,7 +139,7 @@ namespace ManagementSystem.Controller
                 if (supplier == null) return BadRequest("Supplier Couldn't be found");
                 if (supplier.IsActive == false) return BadRequest("Supplier already not active");
                 supplier.IsActive = false;
-                await _unitOfWork.Suppliers.UpdateAsync(supplier);
+                _unitOfWork.Suppliers.Update(supplier);
                 await _unitOfWork.CompleteAsync();
                 return Ok("Supplier Deactive successfully");
 

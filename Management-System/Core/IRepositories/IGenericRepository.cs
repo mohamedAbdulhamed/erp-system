@@ -13,7 +13,7 @@ namespace ManagementSystem.Core.IRepositories
         Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria);
         Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, params Expression<Func<T, object>>[] includes);
         Task<bool> AddAsync(T entity);
-        Task<bool> UpdateAsync(T entity);
+        bool Update(T entity);
         Task<bool> DeleteAsync(int id);
     }
 

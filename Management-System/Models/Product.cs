@@ -1,15 +1,17 @@
-﻿namespace ManagementSystem.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ManagementSystem.Models
 {
     public class Product
     {
+        [Key]
         public int ProductID { get; set; }
-        public string Name { get; set; }
+        public required string Name { get; set; }
         public string? Description { get; set; }
-        public decimal Price { get; set; }
-        public decimal? MinPrice { get; set; }
-        public decimal? MaxPrice { get; set; }
-        public int? Quantity { get; set; }
-        public int ReorderLevel { get; set; }
+        public decimal SellingPrice { get; set; }
+        public decimal PurchasePrice { get; set; }
+        public int Quantity { get; set; } = 0;
+        public int ReorderLevel { get; set; } 
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; }
@@ -23,7 +25,6 @@
         public int? FactoryID { get; set; }
         public virtual Factory Factory { get; set; }
 
-        public virtual ICollection<ProductInventoryMappings> ProductInventoryMappings { get; set; }
 
     }
 }

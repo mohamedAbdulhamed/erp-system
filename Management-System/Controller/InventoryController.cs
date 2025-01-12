@@ -95,7 +95,7 @@ namespace ManagementSystem.Controller
                 var existingInventory = await _unitOfWork.Inventories.GetByIdAsync(model.InventoryID);
                 if (existingInventory == null) return NotFound("No Inventory have been found ");
                 var updatedInventory = _mapper.Map<Inventory>(model);
-                await _unitOfWork.Inventories.UpdateAsync(updatedInventory);
+                 _unitOfWork.Inventories.Update(updatedInventory);
                 await _unitOfWork.CompleteAsync();
                 return Ok("Inventory was updated");
             }
@@ -115,7 +115,7 @@ namespace ManagementSystem.Controller
                 var existingInventory = await _unitOfWork.Inventories.GetByIdAsync(id);
                 if (existingInventory == null) return NotFound("No Inventory have been found ");
                 existingInventory.IsActive = true;
-                await _unitOfWork.Inventories.UpdateAsync(existingInventory);
+                 _unitOfWork.Inventories.Update(existingInventory);
                 await _unitOfWork.CompleteAsync();
                 return Ok("Inventory was actived");
             }
@@ -134,7 +134,7 @@ namespace ManagementSystem.Controller
                 var existingInventory = await _unitOfWork.Inventories.GetByIdAsync(id);
                 if (existingInventory == null) return NotFound("No Inventory have been found ");
                 existingInventory.IsActive = false;
-                await _unitOfWork.Inventories.UpdateAsync(existingInventory);
+                 _unitOfWork.Inventories.Update(existingInventory);
                 await _unitOfWork.CompleteAsync();
                 return Ok("Inventory was Deactived");
             }

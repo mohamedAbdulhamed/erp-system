@@ -1,31 +1,36 @@
-﻿using System.Transactions;
-
-namespace ManagementSystem.Models
+﻿namespace ManagementSystem.Models
 {
     public class CustomerOrder
     {
         public int CustomerOrderID { get; set; }
         public decimal TotalPrice { get; set; }
         public DateTime OrderDate { get; set; }
-
-        public OrderType OrderType { get; set; }
-        public CustumerPaymentType CustumerPaymentType { get; set; }
-
+        public CustomerOrderSource OrderType { get; set; }
+        public CustomerOrderStatues OrderStatues { get; set; }
+        public CustomerOrderType CustomerOrderType { get; set; }
         public int CustumerID { get; set; }
         public virtual Customer Custumer { get; set; }
 
-        public virtual ICollection<CustomerOrderDetail> CustomerOrderDetails { get; set; }
+        public virtual ICollection<CustomerOrderDetail> CustomerOrderDetails { get; set; } =new List<CustomerOrderDetail>();
 
     }
 
-    public enum OrderType
+    public enum CustomerOrderSource
     {
         Online,
-        Local
-    }
-    public enum CustumerPaymentType
+        Galary
+    } 
+    public enum CustomerOrderStatues
     {
-        Cash,
-        Depit
+        Pending,
+        Shipped,
+        Completed
     }
+    public enum CustomerOrderType
+    {
+        Selling,
+        Refund
+    }
+
+   
 }

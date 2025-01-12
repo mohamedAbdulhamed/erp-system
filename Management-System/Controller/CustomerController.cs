@@ -98,7 +98,7 @@ namespace ManagementSystem.Controller
                 if (customer == null) return BadRequest("Customer Couldn't be found");
                 customer.PhoneNumber = model.PhoneNumber;
                 customer.CustomerName = model.CustomerName;
-                await _unitOfWork.Customers.UpdateAsync(customer);
+                _unitOfWork.Customers.Update(customer);
                 await _unitOfWork.CompleteAsync();
                 return Ok("Customer was Updted successfully");
             }
@@ -119,7 +119,7 @@ namespace ManagementSystem.Controller
                 if (customer == null) return BadRequest("customer Couldn't be found");
                 if (customer.IsActive == true) return BadRequest("Customer already active");
                 customer.IsActive = true;
-                await _unitOfWork.Customers.UpdateAsync(customer);
+                 _unitOfWork.Customers.Update(customer);
                 await _unitOfWork.CompleteAsync();
                 return Ok("Customer was updated successfully");
 
@@ -140,7 +140,7 @@ namespace ManagementSystem.Controller
                 if (customer == null) return BadRequest("customer Couldn't be found");
                 if (customer.IsActive == false) return BadRequest("Customer already not active");
                 customer.IsActive = false;
-                await _unitOfWork.Customers.UpdateAsync(customer);
+                 _unitOfWork.Customers.Update(customer);
                 await _unitOfWork.CompleteAsync();
                 return Ok("Customer was updated successfully");
 

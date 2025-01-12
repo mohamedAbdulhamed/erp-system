@@ -3,7 +3,7 @@
     public class UpdateCustomerRequest
     {
         public int CustomerID { get; set; }
-        public string CustomerName { get; set; }
-        public string PhoneNumber { get; set; }
+        public required string CustomerName { get; set; }
+        public required string PhoneNumber { get; set; }
     }
 }

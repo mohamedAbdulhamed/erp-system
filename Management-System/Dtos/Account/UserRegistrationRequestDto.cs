@@ -4,10 +4,10 @@ namespace ManagementSystem.Dtos.Account;
 public class UserRegistrationRequestDto
 {
     [Required]
-    public string UserName { get; set; }
-
-    public string Password { get; set; }
+    public required string UserName { get; set; }
+    [Required]
+    public required string Password { get; set; }
 
     [Required]
-    public string Role { get; set; }
+    public required string Role { get; set; }
 }
