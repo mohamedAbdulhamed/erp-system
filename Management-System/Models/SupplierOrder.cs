@@ -14,7 +14,6 @@ namespace ManagementSystem.Models
         public virtual Supplier Supplier { get; set; }
 
         public virtual ICollection<SupplierOrderDetail> SupplierOrderDetails { get; set; }
-        public virtual ICollection<SupplierOrderTransaction> SupplierOrderTransactions { get; set; }
     }
 
     public enum SupplierPaymentType

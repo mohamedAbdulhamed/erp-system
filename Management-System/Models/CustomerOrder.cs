@@ -15,7 +15,7 @@ namespace ManagementSystem.Models
         public virtual Customer Custumer { get; set; }
 
         public virtual ICollection<CustomerOrderDetail> CustomerOrderDetails { get; set; }
-        public virtual ICollection<CustomerOrderTransaction> CustomerOrderTransactions { get; set; }
+
     }
 
     public enum OrderType

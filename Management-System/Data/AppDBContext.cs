@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ManagementSystem.Models;
+using ManagementSystem.Models;
 
 namespace ManagementSystem.Data
 {
@@ -8,15 +9,23 @@ namespace ManagementSystem.Data
     {
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-        public DbSet<CustomerOrder> Bills { get; set; }
-        public DbSet<SupplierOrderDetail> BillProducts{ get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<CustomerOrder> CustomerOrders { get; set; }
+        public DbSet<CustomerOrderDetail> CustomerOrdersDetails { get; set; }
+        public DbSet<CustomerOrderTransaction> CustomerOrderTransactions { get; set; }
+        public DbSet<CustomerBalance> CustomerBalances { get; set; }
+        public DbSet<Supplier> Suppliers{ get; set; }
+        public DbSet<SupplierOrder> SupplierOrders{ get; set; }
+        public DbSet<SupplierOrderDetail> supplierOrderDetails{ get; set; }
+        public DbSet<SupplierOrderTransaction> supplierOrderTransactions{ get; set; }
+        public DbSet<SupplierBalance> SupplierBalances{ get; set; }
         public DbSet<Factory> Factories{ get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Product> Products{ get; set; }
         public DbSet<ProductCategory> ProductCategories{ get; set; }
         public DbSet<ProductInventoryMappings> ProductInventories{ get; set; }
-        public DbSet<Supplier> Suppliers{ get; set; }
+        //public DbSet<CustomerPhone> CustomerPhones { get; set; }
+        
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -64,7 +73,15 @@ namespace ManagementSystem.Data
                 .WithMany(i => i.ProductInventoryMappings)
                 .HasForeignKey(pi => pi.InventoryID)
                 .OnDelete(DeleteBehavior.Restrict);
-
+           
+            modelBuilder.Entity<Customer>()
+                .HasIndex(c => c.PhoneNumber)
+                .IsUnique();
+        
+            modelBuilder.Entity<Supplier>()
+                .HasIndex(c => c.PhoneNumber)
+                .IsUnique();
+        
         }
     }
 }

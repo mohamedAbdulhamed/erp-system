@@ -1,11 +1,9 @@
 ﻿using ManagementSystem.Models;
-using System.ComponentModel.DataAnnotations;
 
-namespace ManagementSystem.Models
+namespace ManagementSystem.Dtos.CustomerOrderTransaction
 {
-    public class CustomerOrderTransaction
+    public class UpdateCustomerOrderTransactionRequest
     {
-        [Key]
         public int TransactionID { get; set; }
         public string Description { get; set; } = string.Empty;
         public CustomerTransactionType TransactionType { get; set; }
@@ -13,12 +11,5 @@ namespace ManagementSystem.Models
         public DateTime TransactionDate { get; set; }
 
         public int CustomerID { get; set; }
-        public virtual Customer Customer { get; set; }
     }
-    
-    public enum CustomerTransactionType
-    {
-        Addition,
-        Discount,
-    }   
 }

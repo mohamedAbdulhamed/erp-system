@@ -1,5 +1,5 @@
-﻿using Management_System.Core.IRepositories;
-using ManagementSystem.Core.IRepositories;
+﻿using ManagementSystem.Core.IRepositories;
+
 
 namespace ManagementSystem.Core.IConfiguration
 {
@@ -9,6 +9,10 @@ namespace ManagementSystem.Core.IConfiguration
         ISupplierRepository Suppliers { get; }
         IFactoryRpository Factories { get; }
         IInventoryRepository Inventories { get; }
+        ICustomerOrderTransactionRepository CustomerOrderTransactions { get; }
+        ICustomerBalanceRepository CustomerBalances { get; } 
+        ISupplierOrderTransactionRepository SupplierOrderTransactions { get; }
+        ISupplierBalanceRepository SupplierBalances { get; }
 
         Task CompleteAsync();
     }

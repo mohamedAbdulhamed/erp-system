@@ -1,8 +1,6 @@
-﻿using Management_System.Core.IRepositories;
-using Management_System.Core.Repositories;
-using ManagementSystem.Core.IConfiguration;
-using ManagementSystem.Core.IRepositories;
+﻿using ManagementSystem.Core.IRepositories;
 using ManagementSystem.Core.Repositories;
+using ManagementSystem.Core.IConfiguration;
 namespace ManagementSystem.Data;
 
 public class UnitOfWork : IUnitOfWork, IDisposable
@@ -14,10 +12,12 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public ISupplierRepository Suppliers { get; private set; }
     public IFactoryRpository Factories { get; private set; }
     public IInventoryRepository Inventories {  get; private set; }  
-   
-    
+    public ICustomerOrderTransactionRepository CustomerOrderTransactions { get; private set; }
+    public ICustomerBalanceRepository CustomerBalances {  get; private set; }
 
-  
+    public ISupplierOrderTransactionRepository SupplierOrderTransactions { get; private set; }
+
+    public ISupplierBalanceRepository SupplierBalances { get; private set; }
 
     public UnitOfWork(AppDbContext context, ILoggerFactory loggerFactory)
     {
@@ -29,7 +29,10 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         Suppliers = new SupplierRepository(_context,_logger);
         Factories = new FactoryRpository(_context,_logger);
         Inventories = new InventoryRepository(_context,_logger);
-       
+        CustomerOrderTransactions = new CustomerOrderTransactionRepository(_context,_logger);
+        CustomerBalances = new CustomerBalanceRepository(_context,_logger);
+        SupplierOrderTransactions = new SupplierOrderTransactionRepository(_context,_logger);
+        SupplierBalances = new SupplierBalanceRepository(_context,_logger);
     }
 
     public async Task CompleteAsync()

@@ -1,4 +1,4 @@
-﻿using Management_System.Dtos.Inventory;
+﻿using ManagementSystem.Dtos.Inventory;
 using ManagementSystem.Core.IConfiguration;
 using ManagementSystem.Models;
 using ManagementSystem.Services;
@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Mapster;
+using MapsterMapper;
 
-namespace Management_System.Controller
+namespace ManagementSystem.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -15,17 +17,23 @@ namespace Management_System.Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAuthService _authService;
-        private readonly ILogger _logger;
+        private readonly ILogger<InventoryController> _logger;
+        private readonly IMapper _mapper;
 
-        public InventoryController(IUnitOfWork unitOfWork, IAuthService authService, ILogger logger)
+        public InventoryController(
+            IUnitOfWork unitOfWork, 
+            IAuthService authService,
+            ILogger<InventoryController> logger,
+            IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _authService = authService;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet("GetAll")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -43,14 +51,14 @@ namespace Management_System.Controller
         }
         
         [HttpGet("GetById{id}")] 
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> GetById(int id)
         {
             try
             {
                 var existingInventory = await _unitOfWork.Inventories.GetByIdAsync(id);
                 if (existingInventory == null) return NotFound("No Inventory have been found ");
-                return Ok("Order has been added");
+                return Ok(existingInventory);
             }
             catch (Exception ex)
             {
@@ -61,18 +69,12 @@ namespace Management_System.Controller
         }
 
         [HttpPost("Add")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> Add(CreateInventoryRequest model)
         {
             try
             {
-                var Inventory = new Inventory()
-                {
-                    Address = model.Address,
-                    Name = model.Name,
-                    ContactNumber = model.ContactNumber,
-                    inventoryType = model.inventoryType
-                };
+                var Inventory = _mapper.Map<Inventory>(model);
                 await _unitOfWork.Inventories.AddAsync(Inventory);
                 await _unitOfWork.CompleteAsync();
                 return Ok("Inventory was added");
@@ -85,16 +87,15 @@ namespace Management_System.Controller
         }
 
         [HttpPut("Update")]
-        [Authorize]
-        public async Task<IActionResult> Update(int id)
+       // [Authorize]
+        public async Task<IActionResult> Update(UpdateInventoryRequest model)
         {
             try
             {
-                var existingInventory = await _unitOfWork.Inventories.GetByIdAsync(id);
+                var existingInventory = await _unitOfWork.Inventories.GetByIdAsync(model.InventoryID);
                 if (existingInventory == null) return NotFound("No Inventory have been found ");
-
-
-                await _unitOfWork.Inventories.UpdateAsync();
+                var updatedInventory = _mapper.Map<Inventory>(model);
+                await _unitOfWork.Inventories.UpdateAsync(updatedInventory);
                 await _unitOfWork.CompleteAsync();
                 return Ok("Inventory was updated");
             }
@@ -103,10 +104,49 @@ namespace Management_System.Controller
                 _logger.LogError("Error in update Inventory");
                 return StatusCode(500, ex.Message);
             }
+        }  
+        
+        [HttpPut("ActiveInventory{id}")]
+       // [Authorize]
+        public async Task<IActionResult> ActiveInventory(int id)
+        {
+            try
+            {
+                var existingInventory = await _unitOfWork.Inventories.GetByIdAsync(id);
+                if (existingInventory == null) return NotFound("No Inventory have been found ");
+                existingInventory.IsActive = true;
+                await _unitOfWork.Inventories.UpdateAsync(existingInventory);
+                await _unitOfWork.CompleteAsync();
+                return Ok("Inventory was actived");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error in active Inventory");
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPut("DeactiveInventory{id}")]
+       // [Authorize]
+        public async Task<IActionResult> DeactiveInventory(int id)
+        {
+            try
+            {
+                var existingInventory = await _unitOfWork.Inventories.GetByIdAsync(id);
+                if (existingInventory == null) return NotFound("No Inventory have been found ");
+                existingInventory.IsActive = false;
+                await _unitOfWork.Inventories.UpdateAsync(existingInventory);
+                await _unitOfWork.CompleteAsync();
+                return Ok("Inventory was Deactived");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error in deactive Inventory");
+                return StatusCode(500, ex.Message);
+            }
         }
 
-        [HttpDelete("Delete")]
-        [Authorize]
+        [HttpDelete("Delete{id}")]
+      //  [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             try

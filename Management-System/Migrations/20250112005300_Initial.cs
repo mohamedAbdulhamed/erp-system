@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Management_System.Migrations
+namespace ManagementSystem.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -30,13 +30,11 @@ namespace Management_System.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -63,8 +61,8 @@ namespace Management_System.Migrations
                     CustomerID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -78,7 +76,8 @@ namespace Management_System.Migrations
                 {
                     FactoryID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -94,7 +93,8 @@ namespace Management_System.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    inventoryType = table.Column<int>(type: "int", nullable: false)
+                    InventoryType = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -121,7 +121,8 @@ namespace Management_System.Migrations
                     SupplierID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SupplierName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -235,21 +236,67 @@ namespace Management_System.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bills",
+                name: "CustomerBalances",
                 columns: table => new
                 {
-                    OrderID = table.Column<int>(type: "int", nullable: false)
+                    CustomerID = table.Column<int>(type: "int", nullable: false),
+                    TotalCredit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalDebit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalDiscount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalReturn = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerBalances", x => x.CustomerID);
+                    table.ForeignKey(
+                        name: "FK_CustomerBalances_Customers_CustomerID",
+                        column: x => x.CustomerID,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CustomerOrders",
+                columns: table => new
+                {
+                    CustomerOrderID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OrderType = table.Column<int>(type: "int", nullable: false),
+                    CustumerPaymentType = table.Column<int>(type: "int", nullable: false),
                     CustumerID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bills", x => x.OrderID);
+                    table.PrimaryKey("PK_CustomerOrders", x => x.CustomerOrderID);
                     table.ForeignKey(
-                        name: "FK_Bills_Customers_CustumerID",
+                        name: "FK_CustomerOrders_Customers_CustumerID",
                         column: x => x.CustumerID,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CustomerOrderTransactions",
+                columns: table => new
+                {
+                    TransactionID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CustomerID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerOrderTransactions", x => x.TransactionID);
+                    table.ForeignKey(
+                        name: "FK_CustomerOrderTransactions_Customers_CustomerID",
+                        column: x => x.CustomerID,
                         principalTable: "Customers",
                         principalColumn: "CustomerID",
                         onDelete: ReferentialAction.Cascade);
@@ -264,16 +311,16 @@ namespace Management_System.Migrations
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    MinPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    MaxPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    MinPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    MaxPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
                     ReorderLevel = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     SupplierID = table.Column<int>(type: "int", nullable: true),
                     ProductCategoryID = table.Column<int>(type: "int", nullable: false),
-                    FactoryID = table.Column<int>(type: "int", nullable: false)
+                    FactoryID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -299,27 +346,94 @@ namespace Management_System.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BillProducts",
+                name: "SupplierBalances",
                 columns: table => new
                 {
-                    OrderDetailID = table.Column<int>(type: "int", nullable: false)
+                    SupplierID = table.Column<int>(type: "int", nullable: false),
+                    TotalCredit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalDebit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalDiscount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalReturn = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SupplierBalances", x => x.SupplierID);
+                    table.ForeignKey(
+                        name: "FK_SupplierBalances_Suppliers_SupplierID",
+                        column: x => x.SupplierID,
+                        principalTable: "Suppliers",
+                        principalColumn: "SupplierID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SupplierOrders",
+                columns: table => new
+                {
+                    SupplierOrderID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderID = table.Column<int>(type: "int", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OrderType = table.Column<int>(type: "int", nullable: false),
+                    SupplierPaymentType = table.Column<int>(type: "int", nullable: false),
+                    SupplierID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SupplierOrders", x => x.SupplierOrderID);
+                    table.ForeignKey(
+                        name: "FK_SupplierOrders_Suppliers_SupplierID",
+                        column: x => x.SupplierID,
+                        principalTable: "Suppliers",
+                        principalColumn: "SupplierID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "supplierOrderTransactions",
+                columns: table => new
+                {
+                    TransactionID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SupplierID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_supplierOrderTransactions", x => x.TransactionID);
+                    table.ForeignKey(
+                        name: "FK_supplierOrderTransactions_Suppliers_SupplierID",
+                        column: x => x.SupplierID,
+                        principalTable: "Suppliers",
+                        principalColumn: "SupplierID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CustomerOrdersDetails",
+                columns: table => new
+                {
+                    CustomerOrderDetailID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerOrderID = table.Column<int>(type: "int", nullable: false),
                     ProductID = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BillProducts", x => x.OrderDetailID);
+                    table.PrimaryKey("PK_CustomerOrdersDetails", x => x.CustomerOrderDetailID);
                     table.ForeignKey(
-                        name: "FK_BillProducts_Bills_OrderID",
-                        column: x => x.OrderID,
-                        principalTable: "Bills",
-                        principalColumn: "OrderID",
+                        name: "FK_CustomerOrdersDetails_CustomerOrders_CustomerOrderID",
+                        column: x => x.CustomerOrderID,
+                        principalTable: "CustomerOrders",
+                        principalColumn: "CustomerOrderID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BillProducts_Products_ProductID",
+                        name: "FK_CustomerOrdersDetails_Products_ProductID",
                         column: x => x.ProductID,
                         principalTable: "Products",
                         principalColumn: "ProductID",
@@ -349,6 +463,34 @@ namespace Management_System.Migrations
                         principalTable: "Products",
                         principalColumn: "ProductID",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "supplierOrderDetails",
+                columns: table => new
+                {
+                    SupplierOrderDetailID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SupplierOrderID = table.Column<int>(type: "int", nullable: false),
+                    ProductID = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_supplierOrderDetails", x => x.SupplierOrderDetailID);
+                    table.ForeignKey(
+                        name: "FK_supplierOrderDetails_Products_ProductID",
+                        column: x => x.ProductID,
+                        principalTable: "Products",
+                        principalColumn: "ProductID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_supplierOrderDetails_SupplierOrders_SupplierOrderID",
+                        column: x => x.SupplierOrderID,
+                        principalTable: "SupplierOrders",
+                        principalColumn: "SupplierOrderID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -391,19 +533,30 @@ namespace Management_System.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BillProducts_OrderID",
-                table: "BillProducts",
-                column: "OrderID");
+                name: "IX_CustomerOrders_CustumerID",
+                table: "CustomerOrders",
+                column: "CustumerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BillProducts_ProductID",
-                table: "BillProducts",
+                name: "IX_CustomerOrdersDetails_CustomerOrderID",
+                table: "CustomerOrdersDetails",
+                column: "CustomerOrderID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerOrdersDetails_ProductID",
+                table: "CustomerOrdersDetails",
                 column: "ProductID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bills_CustumerID",
-                table: "Bills",
-                column: "CustumerID");
+                name: "IX_CustomerOrderTransactions_CustomerID",
+                table: "CustomerOrderTransactions",
+                column: "CustomerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customers_PhoneNumber",
+                table: "Customers",
+                column: "PhoneNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductInventories_InventoryID",
@@ -430,6 +583,32 @@ namespace Management_System.Migrations
                 name: "IX_Products_SupplierID",
                 table: "Products",
                 column: "SupplierID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_supplierOrderDetails_ProductID",
+                table: "supplierOrderDetails",
+                column: "ProductID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_supplierOrderDetails_SupplierOrderID",
+                table: "supplierOrderDetails",
+                column: "SupplierOrderID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SupplierOrders_SupplierID",
+                table: "SupplierOrders",
+                column: "SupplierID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_supplierOrderTransactions_SupplierID",
+                table: "supplierOrderTransactions",
+                column: "SupplierID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Suppliers_PhoneNumber",
+                table: "Suppliers",
+                column: "PhoneNumber",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -451,10 +630,25 @@ namespace Management_System.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BillProducts");
+                name: "CustomerBalances");
+
+            migrationBuilder.DropTable(
+                name: "CustomerOrdersDetails");
+
+            migrationBuilder.DropTable(
+                name: "CustomerOrderTransactions");
 
             migrationBuilder.DropTable(
                 name: "ProductInventories");
+
+            migrationBuilder.DropTable(
+                name: "SupplierBalances");
+
+            migrationBuilder.DropTable(
+                name: "supplierOrderDetails");
+
+            migrationBuilder.DropTable(
+                name: "supplierOrderTransactions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -463,13 +657,16 @@ namespace Management_System.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Bills");
+                name: "CustomerOrders");
 
             migrationBuilder.DropTable(
                 name: "Inventories");
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "SupplierOrders");
 
             migrationBuilder.DropTable(
                 name: "Customers");

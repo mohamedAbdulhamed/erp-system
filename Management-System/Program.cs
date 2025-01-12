@@ -2,12 +2,15 @@ using ManagementSystem.Core.IConfiguration;
 using ManagementSystem.Data;
 using ManagementSystem.Middlewares;
 using ManagementSystem.Models;
+using ManagementSystem.Profiles;
 using ManagementSystem.Services;
+using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -98,10 +101,11 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Shipper", policy => policy.RequireRole("Shipper"));
 });
 
-//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddMapster();
+TypeAdapterConfig.GlobalSettings.Scan(typeof(CustomerProfile).Assembly);
 
 builder.Services.AddCors(options =>
 {

@@ -1,7 +1,7 @@
 ﻿using ManagementSystem.Core.IRepositories;
 using ManagementSystem.Models;
 
-namespace Management_System.Core.IRepositories
+namespace ManagementSystem.Core.IRepositories
 {
     public interface IFactoryRpository : IGenericRepository<Factory>
     {

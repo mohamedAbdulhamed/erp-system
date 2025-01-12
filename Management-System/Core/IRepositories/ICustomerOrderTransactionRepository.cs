@@ -3,8 +3,8 @@ using ManagementSystem.Models;
 
 namespace ManagementSystem.Core.IRepositories
 {
-    public interface IInventoryRepository : IGenericRepository<Inventory>
+    public interface ICustomerOrderTransactionRepository : IGenericRepository<CustomerOrderTransaction>
     {
-
+        
     }
 }

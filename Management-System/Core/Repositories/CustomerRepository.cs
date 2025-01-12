@@ -1,10 +1,10 @@
-﻿using Management_System.Core.IRepositories;
+﻿using ManagementSystem.Core.IRepositories;
 
 using ManagementSystem.Core.Repositories;
 using ManagementSystem.Data;
 using ManagementSystem.Models;
 
-namespace Management_System.Core.Repositories
+namespace ManagementSystem.Core.Repositories
 {
     public class CustomerRepository : GenericRepository<Customer> , ICustomerRepository 
     {

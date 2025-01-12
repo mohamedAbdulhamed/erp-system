@@ -2,8 +2,9 @@
 
 namespace ManagementSystem.Dtos.Inventory
 {
-    public class CreateInventoryRequest
+    public class UpdateInventoryRequest
     {
+        public int InventoryID { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string? ContactNumber { get; set; }

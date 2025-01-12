@@ -42,8 +42,6 @@ namespace ManagementSystem.Data
                 {
                    
                     UserName = adminUsername,
-                    FirstName = adminFirstname,
-                    LastName = adminLastname,
                     Email = adminEmail,
                     EmailConfirmed = true
                 };
